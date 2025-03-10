@@ -62,20 +62,18 @@
 - #text(weight: "bold")[Learning Objectives:]
   - Understanding the impact of LLMs on modern software development 
   - Exploring practical applications across the development lifecycle #fa-code-branch()
-  - Examining ethical considerations and limitations #fa-balance-scale()
+  - Examining (some of) ethical considerations and limitations #fa-balance-scale()
   - Anticipating future trends and preparing for AI-augmented development #fa-chart-line()
 
 - #text(weight: "bold")[Key Applications We'll Cover:]
   - Code generation and completion #fa-code()
-  - Documentation automation #fa-file-alt()
-  - Automated testing and debugging #fa-bug()
+  - Testing and debugging implications #fa-bug()
   - Code review and quality assurance #fa-check-circle()
   - Requirements analysis and specification #fa-list-alt()
 
 - #text(weight: "bold")[Future Directions & Concerns:]
   - Multi-agent LLM systems for collaborative development #fa-users()
   - Advanced context understanding with RAG #fa-database()
-  - Alignment challenges and ethical considerations #fa-exclamation-triangle()
   - Developer skill evolution in an AI-augmented world #fa-graduation-cap()
 
 - #text(weight: "bold")[Note:] This field is evolving rapidly—concepts matter more than specific implementations #fa-lightbulb()
@@ -97,38 +95,52 @@
 ]
 == Machine Learning for Software Engineering
 
-#example[
-  #text(weight: "bold")[Why?]
-  
-  - #text(weight: "bold")[Automation:] automate repetitive tasks (e.g., code generation).
-  - #text(weight: "bold")[Prediction:] predict software quality, bugs, and performance.
-  - #text(weight: "bold")[Optimization:] optimize software development processes.
-  - #text(weight: "bold")[Understanding:] understand software artifacts and processes.
-  - #text(weight: "bold")[Personalization:] personalize software development tools.
-]
+#block(
+  fill: rgb("#e8f4ea"),  // Light green background
+  width: 100%,
+  inset: 1em,
+  radius: 8pt,
+  stroke: (paint: rgb("#9aafa9"), thickness: 1pt),
+  [
+    #text(weight: "bold")[Why?]
+    
+    - #text(weight: "bold")[Automation:] automate repetitive tasks (e.g., code generation).
+    - #text(weight: "bold")[Prediction:] predict software quality, bugs, and performance.
+    - #text(weight: "bold")[Optimization:] optimize software development processes.
+    - #text(weight: "bold")[Understanding:] understand software artifacts and processes.
+    - #text(weight: "bold")[Personalization:] personalize software development tools.
+  ]
+)
 
-#example[
-  #text(weight: "bold")[When?]
-  
-  - #text(weight: "bold")[Requirement Engineering:] requirements elicitation and analysis.
-  - #text(weight: "bold")[Design:] design patterns, architecture, and modeling.
-  - #text(weight: "bold")[Implementation:] code generation, refactoring, and bug fixing.
-  - #emph[#text(weight: "bold")[Testing:]] test case generation, fault prediction...
-  - #text(weight: "bold")[Maintenance:] bug prediction, code review...
-]
+#block(
+  fill: rgb("#e8eaf4"),  // Light blue background
+  width: 100%,
+  inset: 1em,
+  radius: 8pt,
+  stroke: (paint: rgb("#9a9faf"), thickness: 1pt),
+  [
+    #text(weight: "bold")[When?]
+    
+    - #text(weight: "bold")[Requirement Engineering:] requirements elicitation and analysis.
+    - #text(weight: "bold")[Design:] design patterns, architecture, and modeling.
+    - #text(weight: "bold")[Implementation:] code generation, refactoring, and bug fixing.
+    - #emph[#text(weight: "bold")[Testing:]] test case generation, fault prediction...
+    - #text(weight: "bold")[Maintenance:] bug prediction, code review...
+  ]
+)
 
 == Machine Learning for Software Engineering -- Overview
 
   #align(center)[
     #image("figures/distrubution.png", width: 90%)
   ]
-_From: Machine Learning for Software Engineering: {A} Tertiary Study_
+_From: Machine Learning for Software Engineering: A Tertiary Study_
 
 
 == Early approaches -- Supervised Learning
 
 #example[
-  #text(weight: "bold")[Code Summarization (CodeNN)#footnote("DBLP:conf/acl/IyerKCZ16")]
+  #text(weight: "bold")[Code Summarization (CodeNN)#footnote(link("https://github.com/sriniiyer/codenn"))]
   
   #align(center)[
     #image("figures/codenn.png", width: 80%)
@@ -138,7 +150,7 @@ _From: Machine Learning for Software Engineering: {A} Tertiary Study_
 == Early approaches -- Supervised Learning
 
 #example[
-  #text(weight: "bold")[Malware Detection#footnote("DBLP:journals/tii/CuiXCCWC18")]
+  #text(weight: "bold")[Malware Detection#footnote("Cui, Z., Xue, F., Cai, X., Cao, Y., Wang, G., & Chen, J. (2018). Detection of Malicious Code Variants Based on Deep Learning. IEEE Trans. Ind. Informatics, 14(7), 3187–3196. doi:10.1109/TII.2018.2822680")]
   
   #align(center)[
     #image("figures/malware-detection.png", width: 80%)
@@ -148,7 +160,7 @@ _From: Machine Learning for Software Engineering: {A} Tertiary Study_
 == Early approaches -- Supervised Learning
 
 #example[
-  #text(weight: "bold")[Code Review -- Deep Review#footnote("DBLP:conf/pakdd/LiSTHXLL19")]
+  #text(weight: "bold")[Code Review -- Deep Review#footnote("Li, H.-Y., Shi, S.-T., Thung, F., Huo, X., Xu, B., Li, M., & Lo, D. (2019). DeepReview: Automatic Code Review Using Deep Multi-instance Learning. In Q. Yang, Z.-H. Zhou, Z. Gong, M.-L. Zhang, & S.-J. Huang (Eds.), Advances in Knowledge Discovery and Data Mining - 23rd Pacific-Asia Conference, PAKDD 2019, Macau, China, April 14-17, 2019, Proceedings, Part II (pp. 318–330). doi:10.1007/978-3-030-16145-3_25")]
   
   #align(center)[
     #image("figures/deep-review.png", width: 60%)
@@ -158,7 +170,7 @@ _From: Machine Learning for Software Engineering: {A} Tertiary Study_
 == Early approaches -- Unsupervised Learning
 
 #example[
-  #text(weight: "bold")[Code Completion (kNN)#footnote("DBLP:conf/sigsoft/BruchMM09")]
+  #text(weight: "bold")[Code Completion (kNN)#footnote("Bruch, M., Monperrus, M., & Mezini, M. (2009). Learning from examples to improve code completion systems. In H. van Vliet & V. Issarny (Eds.), Proceedings of the 7th joint meeting of the European Software Engineering Conference and the ACM SIGSOFT International Symposium on Foundations of Software Engineering, 2009, Amsterdam, The Netherlands, August 24-28, 2009 (pp. 213–222). doi:10.1145/1595696.1595728")]
   
   #align(center)[
     #image("figures/code-completions.png", width: 80%)
@@ -203,9 +215,15 @@ _From: Machine Learning for Software Engineering: {A} Tertiary Study_
 )
 
 == Human-level performance
-
+#align(center)[
+  #image("figures/can-ai-code.png", width: 100%)
+]
+#link("https://huggingface.co/spaces/mike-ravkine/can-ai-code-results")
 == LLM in SE -- Areas of Application
 
+#v(1em)
+#align(center)[#text(style: "italic")[LLMs connect each phase of development, creating a more integrated workflow and improving collaboration between developers and AI systems.]]
+#v(1em)
 #grid(
   columns: (1fr, 1fr),
   gutter: 1em,
@@ -245,10 +263,7 @@ _From: Machine Learning for Software Engineering: {A} Tertiary Study_
   ]
 )
 
-== 
-#v(1em)
-#align(center)[#text(style: "italic")[LLMs connect each phase of development, creating a more integrated workflow #fa-arrows-alt-h()]]
-#v(1em)
+== LLM in SE -- Areas of Application
 
 #grid(
   columns: (1fr, 1fr),
@@ -291,20 +306,54 @@ _From: Machine Learning for Software Engineering: {A} Tertiary Study_
   ]
 )
 
-== Copilot X
+== Copilot (Github)
 #align(center)[
   #image("figures/copilot-logo.png", width: 20%)
   
   #link("https://github.com/features/copilot")
 ]
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 1em,
+  [
+    #block(
+      fill: rgb("#f7fafc"),
+      width: 100%,
+      inset: 1em,
+      radius: 8pt,
+      height: 50%,
+      stroke: (paint: rgb("#cbd5e0"), thickness: 1pt),
+      [
+        #align(center)[#text(weight: "bold", size: 20pt)[Overview]]
+        #v(0.5em)
+        - Advanced AI coding assistant by GitHub/Microsoft
+        - Released 2021, #text(weight: "bold")[1M+ active developers]
+        - Uses a family of specialized language models
+        - Trained on billions of lines of public code
+      ]
+    )
+  ],
+  [
+    #block(
+      fill: rgb("#f0f9ff"),
+      width: 100%,
+      inset: 1em,
+      radius: 8pt,
+      height: 50%,
+      stroke: (paint: rgb("#bae6fd"), thickness: 1pt),
+      [
+        #align(center)[#text(weight: "bold", size: 20pt)[Key Features #fa-code()]]
+        #v(0.5em)
+        - Real-time code suggestions #fa-lightbulb()
+        - Context-aware assistance #fa-brain()
+        - Multi-language support #fa-language()
+        - IDE integration (VS Code, JetBrains) #fa-plug()
+      ]
+    )
+  ]
+)
 
-- Solution developed by Microsoft specialized for code development
-- Released in 2021, now it has more than 1 million users.
-- Integrated in several IDEs
-  - Visual Studio Code
-  - IntelliJ
-
-== Copilot X -- Report#footnote(link("https://github.blog/2022-09-07-research-quantifying-github-copilots-impact-on-developer-productivity-and-happiness/"))
+== Copilot -- Report#footnote(link("https://github.blog/2022-09-07-research-quantifying-github-copilots-impact-on-developer-productivity-and-happiness/"))
 #grid(
   columns: (35%, 55%),
   gutter: 1em,
@@ -312,36 +361,225 @@ _From: Machine Learning for Software Engineering: {A} Tertiary Study_
   [#image("figures/copilot-report-2.png", width: 100%)]
 )
 
-== Copilot X Concerns -- Security#footnote(link("https://blog.gitguardian.com/yes-github-copilot-can-leak-secrets/"))
+== A Copilot is all you need -- Code Completion
+#align(center)[
+  #image("figures/code-completion.png", width: 100%)
+]
+== A Copilot is all you need -- Code Generation
+#align(center)[
+  #image("figures/code-generation.png", width: 100%)
+]
+== A Copilot is all you need -- Test generation
+#align(center)[
+  #image("test-generation.png", width: 80%)
+]
+*Note!*: Are we sure we want test generation to be demanded to Copilot?
+
+== A Copilot is all you need -- API Documentation
+#align(center)[
+  #image("documentation-generation.png", width: 100%)
+]
+== A Copilot is all you need -- Code Review 
+#align(center)[
+  #image("figures/code-review.png", width: 100%)
+]
+== Is it really what you need? Copilot Concerns -- Security#footnote(link("https://blog.gitguardian.com/yes-github-copilot-can-leak-secrets/"))
 #align(center)[
   #image("figures/copilot-concerns.png", width: 100%)
 ]
 
-== Copilot X Concerns -- Code Quality#footnote(link("https://www.gitclear.com/coding_on_copilot_data_shows_ais_downward_pressure_on_code_quality"))
+== Is it really what you need?  Copilot Concerns -- Code Quality#footnote(link("https://www.gitclear.com/coding_on_copilot_data_shows_ais_downward_pressure_on_code_quality"))
 #align(center)[
   #image("figures/problem-code-quality.png", width: 100%)
 ]
 
-== How Copilot X Works: Understanding RAG Architecture
 
-#block(
-  fill: rgb("#e6e6e6"),
-  width: 100%,
-  inset: 1em,
-  radius: 8pt,
-  stroke: (paint: rgb("#c7c5c5"), thickness: 1pt),
+== How Copilot (Perhaps) Works: Understanding RAG Architecture
+
+#align(center)[
+  #image("figures/RAG-phases.png", width: 80%)
+]
+== RAG Architecture -- Data Indexing
+
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 1em,
   [
-    #text(weight: "bold")[Architectural Overview]
-    
-    - Built on advanced #text(weight: "bold")[Retrieval-Augmented Generation (RAG)]
-    - Combines real-time code retrieval with generative AI capabilities
-    - Indexes and analyzes code repositories and documentation
-    - Provides context-aware suggestions based on your current project
-    - Continuously improves through user feedback and interaction patterns
+    #block(
+      fill: rgb("#f0f9ff"),
+      width: 100%,
+      height: 65%,
+      inset: 1em,
+      radius: 8pt,
+      [
+        #text(weight: "bold")[Data Indexing Process]
+        
+        - Parsing and chunking source code
+        - Generating embeddings for code segments
+        - Creating searchable vector database
+        - Metadata extraction and annotation
+        
+        #v(0.5em)
+        #text(style: "italic", size: 16pt)[
+          "Transforms raw code repositories into structured, searchable knowledge"
+        ]
+      ]
+    )
+  ],
+  [
+    #block(
+      fill: rgb("#f5f5f5"),
+      width: 100%,
+      inset: 1em,
+      radius: 8pt,
+      height: 65%,
+      [
+        #text(weight: "bold")[Practical Considerations]
+        
+        - Embedding dimensions (typically 768-1536)
+        - Chunking strategies (function-level, file-level)
+        - Storage options (in-memory vs. persistent)
+        - Indexing methods (tree-based, graph-based)
+        - Handling of comments and documentation
+        - Versioning and incremental updates
+      ]
+    )
   ]
 )
 
-== LLMs for Software Testing
+
+
+#block(
+  fill: rgb("#e8f4ea"),
+  width: 100%,
+  inset: 1em,
+  radius: 8pt,
+  [
+    #text(weight: "bold")[Vector store:]
+    
+    - #text(weight: "bold")[Vector Database:] Specialized storage optimized for similarity search
+    - #text(weight: "bold")[Indexing Strategies:] HNSW, IVF, etc. for efficient retrieval
+    - #text(weight: "bold")[Metadata Store:] Additional context about each code fragment
+    - #text(weight: "bold")[Update Mechanisms:] Keeping the index synchronized with codebase changes
+  ]
+)
+== RAG Architecture -- Retrieval
+
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 1em,
+  [
+    #block(
+      fill: rgb("#f0f9ff"),
+      width: 100%,
+      inset: 1em,
+      radius: 8pt,
+      [
+        #text(weight: "bold")[Retrieval Process]
+        
+        - Convert user query to embedding vector
+        - Perform similarity search in vector space
+        - Apply filters based on context/preferences
+        - Rank results by relevance
+        - Select top-k most relevant code examples
+        
+        #v(0.5em)
+        #text(style: "italic", size: 16pt)[
+          "Finds the most relevant code snippets based on semantic similarity"
+        ]
+      ]
+    )
+  ],
+  [
+    #block(
+      fill: rgb("#f5f5f5"),
+      width: 100%,
+      inset: 1em,
+      radius: 8pt,
+      [
+        #text(weight: "bold")[Practical Techniques]
+        
+        - Cosine similarity for semantic matching
+        - Approximate nearest neighbor search
+        - Top-k retrieval (typically k=3 to 10)
+        - Re-ranking strategies for relevance
+        - Hybrid retrieval (combining keyword and vector search)
+        - Context window management (token limits)
+        - Filtering by programming language or domain
+      ]
+    )
+  ]
+)
+== RAG Architecture -- Augmentation & Generation
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 1em,
+  [
+    #block(
+      fill: rgb("#fff8e1"),
+      width: 100%,
+      inset: 1em,
+      radius: 8pt,
+      [
+        #text(weight: "bold")[Context Augmentation]
+        - Enrich prompts with retrieved code examples
+        - Include documentation and project conventions
+        - Incorporate API usage examples and test cases
+        
+        #text(style: "italic", size: 16pt)[
+          "Enhances LLM knowledge with relevant context"
+        ]
+      ]
+    )
+  ],
+  [
+    #block(
+      fill: rgb("#f5f5f5"),
+      width: 100%,
+      inset: 1em,
+      radius: 8pt,
+      [
+        #text(weight: "bold")[Augmentation Strategies]
+        - Template-based prompt construction
+        - Context prioritization and structured formatting
+        - Documentation and error case integration
+        - Dependency analysis and style pattern extraction
+      ]
+    )
+  ]
+)
+
+#block(
+  fill: rgb("#e8eaf4"),
+  width: 100%,
+  inset: 1em,
+  radius: 8pt,
+  [
+    #text(weight: "bold")[Generation Benefits:]
+    
+    - #text(weight: "bold")[Grounded Responses:] Code generation based on real examples
+    - #text(weight: "bold")[Up-to-date Information:] Access to latest APIs and patterns
+    - #text(weight: "bold")[Project Consistency:] Alignment with existing codebase styles
+    - #text(weight: "bold")[Reduced Hallucination:] Minimizes fabricated or incorrect code
+    - #text(weight: "bold")[Context Awareness:] Understanding of project-specific requirements
+  ]
+)
+
+
+
+== LLMs for Software Testing #footnote(link("https://arxiv.org/abs/2307.07221"))
+#focus-slide()[
+  #align(center)[
+    #text(size: 28pt, weight: "bold")[LLMs for Software Testing]
+    
+    #v(1em)
+    
+    #text(size: 20pt)[
+      Leveraging Large Language Models to enhance software testing processes and improve code quality.
+    ]
+  ]
+]
+== LLMs for Software Testing -- Overview
 
 #align(center)[
   #image("figures/overview.png", width: 100%)
@@ -350,20 +588,29 @@ _From: Machine Learning for Software Engineering: {A} Tertiary Study_
 - Takeaways:
   - LLMs can be used for #emph[multiple] testing tasks.
   - Currently, LLMs are used for #emph[test case generation] and #emph[bug fix].
+  - The image shows a strong focus on #emph[unit testing] applications.
+  - There's significant interest in using LLMs for #emph[test oracle creation] - determining expected outputs.
+  - Most research combines LLMs with #emph[traditional testing frameworks] rather than replacing them.
 
 == LLMs for Software Testing -- Methods
 
 #align(center)[
   #image("figures/how-llm-are-used.png", width: 100%)
 ]
-
-- Takeaways:
-  - Prompt Engineering is the main method used to adapt LLMs to testing tasks.
-    - Why? No need to fine-tune the model.
-    - Why? Can be used with any LLM.
-  - #text(weight: "bold")[Zero-shot learning] is the most used method.
-    - Simple and effective.
-    - Concerns about its effectiveness.
+- #text(weight: "bold")[Key Findings:]
+  - #text(weight: "bold")[Prompt Engineering dominates] as the primary adaptation method:
+    - Requires no model fine-tuning → lower computational cost
+    - Offers flexibility across different LLM platforms
+    - Enables rapid iteration of testing approaches
+  
+  - #text(weight: "bold")[Learning approaches spectrum:]
+    - #text(weight: "bold")[Zero-shot learning] (88%) is most prevalent
+      - Advantages: Simplicity, minimal setup, immediate application
+      - Limitations: Often lacks domain-specific precision, inconsistent results
+    
+    - #text(weight: "bold")[Few-shot learning] provides middle ground:
+      - Balances implementation ease with improved performance
+      - Critical for complex testing scenarios with specific patterns
 
 == LLMs for Software Testing -- Methods
 
@@ -371,8 +618,148 @@ _From: Machine Learning for Software Engineering: {A} Tertiary Study_
   #image("figures/llm-usage.png", width: 100%)
 ]
 
-- Modern solution integrate LLM in standard testing tools.
-  - LLM used as an #emph[intelligent] agent in the testing process -- more example will be shown in the next slides.
+- #text(weight: "bold")[Modern solutions integrate LLMs in standard testing tools:]
+    - LLMs are used as #emph[intelligent agents] in the testing process.
+    - Examples include:
+      - #text(weight: "bold")[Statistic analysis:] leveraging statistical methods to enhance testing.
+      - #text(weight: "bold")[Program analysis:] using LLMs to analyze and improve code.
+      - #text(weight: "bold")[Mutation testing:] generating and evaluating mutants to improve test quality.
+      - #text(weight: "bold")[Syntactic repair:] automatically fixing syntax errors.
+      - #text(weight: "bold")[Differential testing:] comparing outputs of different program versions.
+      - #text(weight: "bold")[Reinforcement learning:] applying RL techniques to optimize testing strategies.
+      - #text(weight: "bold")[Others:] various other innovative uses of LLMs in testing.
+
+== Mutation testing
+  #align(center)[
+    #text(size: 28pt, weight: "bold")[Mutation Testing with LLMs]
+    
+    #v(1em)
+    
+    #text(size: 20pt)[
+      Using LLMs to intelligently generate and evaluate code mutations to assess test suite quality
+    ]
+  ]
+  
+  #v(1em)
+  
+  #grid(
+    columns: (1fr, 1fr),
+    gutter: 1em,
+    [
+      #block(
+        fill: rgb("#e8f4ea"),
+        width: 100%,
+        inset: 1em,
+        height: 40%,
+        radius: 8pt,
+        [
+          #text(weight: "bold")[Traditional Mutation Testing]
+          - Random code alterations
+          - Computationally expensive
+          - Many irrelevant mutations
+          - Limited mutation operators
+        ]
+      )
+    ],
+    [
+      #block(
+        fill: rgb("#e8eaf4"),
+        width: 100%,
+        inset: 1em,
+        height: 40%,
+        radius: 8pt,
+        [
+          #text(weight: "bold")[LLM-Enhanced Mutation Testing]
+          - Semantically meaningful mutations
+          - Context-aware code changes
+          - Targeting edge cases and vulnerabilities
+          - Higher-quality mutants with fewer resources
+        ]
+      )
+    ]
+  )
+  
+== Mutation Testing -- Example
+  #v(1em)
+  
+    #grid(
+      columns: (1fr),
+      gutter: 0.5em,
+      [
+        #block(
+          fill: rgb("#f5f5f5"),
+          width: 100%,
+          inset: 0.8em,
+          radius: 4pt,
+          [
+            #text(weight: "bold")[Original code:]
+            ```python
+            def divide(a, b):
+                return a / b
+            ```
+          ]
+        )
+      ]
+    )
+    
+    #text(weight: "bold")[LLM-generated intelligent mutations:]
+    
+    #grid(
+      columns: (1fr, 1fr),
+      gutter: 1em,
+      [
+        #block(
+          fill: rgb("#fff8e1"),
+          width: 100%,
+          inset: 0.8em,
+          radius: 4pt,
+          [
+            #text(weight: "bold")[Boundary case mutation]
+            ```python
+            def divide(a, b):
+                return a / (b + 0.0001)  # Avoid exact zero
+            ```
+          ]
+        )
+      ],
+      [
+        #block(
+          fill: rgb("#e3f2fd"),
+          width: 100%,
+          inset: 0.8em,
+          radius: 4pt,
+          [
+            #text(weight: "bold")[Error handling mutation]
+            ```python
+            def divide(a, b):
+                if b == 0: return float('inf')
+                return a / b
+            ```
+          ]
+        )
+      ]
+    )
+    
+    #grid(
+      columns: (1fr),
+      gutter: 0.5em,
+      [
+        #block(
+          fill: rgb("#e8f5e9"),
+          width: 100%,
+          inset: 0.8em,
+          radius: 4pt,
+          [
+            #text(weight: "bold")[Logic inversion mutation]
+            ```python
+            def divide(a, b):
+                return b / a  # Swap arguments
+            ```
+          ]
+        )
+      ]
+    )
+  
 
 == LLMs for Software Testing -- Input
 
@@ -381,8 +768,11 @@ _From: Machine Learning for Software Engineering: {A} Tertiary Study_
 ]
 
 - Takeaways:
-  - Passing the code as input is the most used method.
-  - Additional information seems to be useful.
+  - #text(weight: "bold")[Code (68%)]: Majority of inputs are code snippets - core focus on code-related tasks
+  - #text(weight: "bold")[Bug descriptions (10%)]: Essential for understanding and fixing issues
+  - #text(weight: "bold")[Error information (6%)]: Critical for debugging and issue resolution
+  - #text(weight: "bold")[UI hierarchy files (5%)]: Useful for testing user interfaces and interactions
+
 
 == Innovative Solutions for LLMs -- LLM-Agent models
 
@@ -404,16 +794,51 @@ _From: Machine Learning for Software Engineering: {A} Tertiary Study_
   #image("figures/number-of-papers.png", width: 100%)
 ]
 
+== LLM-Agent -- Why?
+#block(
+  fill: rgb("#e8f4ea"),
+  width: 100%,
+  inset: 1em,
+  radius: 8pt,
+  stroke: (paint: rgb("#9aafa9"), thickness: 1pt),
+  [
+    #text(weight: "bold")[Evolving Beyond Single LLMs]
+    
+    - #text(weight: "bold")[Complex Problem Solving:] Break down software engineering tasks into manageable sub-tasks
+    - #text(weight: "bold")[Specialized Expertise:] Different agents can be optimized for specific development phases
+    - #text(weight: "bold")[Tool Integration:] Agents can leverage external tools (debuggers, profilers, version control)
+    - #text(weight: "bold")[Autonomous Operation:] Reduced human intervention for repetitive or complex tasks
+    - #text(weight: "bold")[Collaborative Development:] Multiple agents working together mimic team dynamics
+  ]
+)
+
+
+#block(
+  fill: rgb("#e8eaf4"),
+  width: 100%,
+  inset: 1em,
+  radius: 8pt,
+  stroke: (paint: rgb("#9a9faf"), thickness: 1pt),
+  [
+    #text(weight: "bold")[Benefits for Modern Software Engineering]
+    
+    - #text(weight: "bold")[End-to-End Solutions:] Complete software development lifecycle coverage
+    - #text(weight: "bold")[Reasoning & Planning:] Strategic approaches rather than just tactical responses
+    - #text(weight: "bold")[Self-Improvement:] Agents can learn from feedback and outcomes
+    - #text(weight: "bold")[System Integration:] Seamless connection with existing development workflows
+    - #text(weight: "bold")[Scalability:] Handles growing complexity of modern software projects
+  ]
+)
 == LLM-Agent -- Modules
 
 #align(center)[
   #image("figures/overview-agents.png", width: 100%)
 ]
 
-== Meta GPT
 
+== AIder -- The AI Developer#footnote(link("https://aider.chat/"))
 #align(center)[
-  #image("figures/meta-gpt-idea.png", width: 100%)
+  #image("figures/aider.png", width: 80%)
 ]
 
 == Auto GPT
@@ -421,6 +846,14 @@ _From: Machine Learning for Software Engineering: {A} Tertiary Study_
 #align(center)[
   #image("figures/auto-gpt-loop.png", width: 90%)
 ]
+
+
+== Meta GPT
+
+#align(center)[
+  #image("figures/meta-gpt-idea.png", width: 100%)
+]
+
 
 #align(right)[
   #link("https://github.com/Significant-Gravitas/AutoGPT")
@@ -432,6 +865,30 @@ _From: Machine Learning for Software Engineering: {A} Tertiary Study_
   #image("figures/agent-verse.png", width: 100%)
 ]
 
+== ... And Many Others :)
+
+#grid(
+  columns: (1fr, 1fr, 1fr),
+  gutter: 1em,
+  [
+    #align(center)[
+      #image("figures/all-hands.png",  height: 50%)
+      #text(weight: "bold")[All Hands]
+    ]
+    ],
+    [
+    #align(center)[
+      #image("figures/lang-graph.png", height: 50%)
+      #text(weight: "bold")[Lang Graph]
+    ]
+    ],
+    [
+    #align(center)[
+      #image("figures/crewai.png", height: 50%)
+      #text(weight: "bold")[Crew AI]
+    ]
+    ],
+)
 == Conclusion
 
 #align(center)[
