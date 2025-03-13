@@ -67,8 +67,8 @@
 
 - #text(weight: "bold")[Key Applications We'll Cover:]
   - Code generation and completion #fa-code()
-  - Testing and debugging implications #fa-bug()
-  - Code review and quality assurance #fa-check-circle()
+  - Testing implications and current landscape #fa-bug()
+  - Code review and quality assurance (kind of) #fa-check-circle()
   - Requirements analysis and specification #fa-list-alt()
 
 - #text(weight: "bold")[Future Directions & Concerns:]
@@ -124,8 +124,8 @@
     - #text(weight: "bold")[Requirement Engineering:] requirements elicitation and analysis.
     - #text(weight: "bold")[Design:] design patterns, architecture, and modeling.
     - #text(weight: "bold")[Implementation:] code generation, refactoring, and bug fixing.
-    - #emph[#text(weight: "bold")[Testing:]] test case generation, fault prediction...
-    - #text(weight: "bold")[Maintenance:] bug prediction, code review...
+    - #emph[#text(weight: "bold")[Testing:]] test case generation, fault prediction, ...
+    - #text(weight: "bold")[Maintenance:] bug prediction, code review, ...
   ]
 )
 
@@ -140,7 +140,7 @@ _From: Machine Learning for Software Engineering: A Tertiary Study_
 == Early approaches -- Supervised Learning
 
 #example[
-  #text(weight: "bold")[Code Summarization (CodeNN)#footnote(link("https://github.com/sriniiyer/codenn"))]
+  #text(weight: "bold")[Coderf Summarization (CodeNN)#footnote(link("https://github.com/sriniiyer/codenn"))]
   
   #align(center)[
     #image("figures/codenn.png", width: 80%)
