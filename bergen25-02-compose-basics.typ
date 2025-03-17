@@ -4,6 +4,19 @@
 #import "@preview/ctheorems:1.1.3": *
 #import "@preview/numbly:0.1.0": numbly
 
+#let fancy-code = (content) => {
+  block(
+    inset: (x: 16pt, y: 12pt),
+    fill: rgb("#f0f0f0"),
+    stroke: (paint: rgb("#d0d0d0"), thickness: 1pt),
+    radius: 8pt,
+    shadow: (color: rgb(0, 0, 0).with(alpha: 0.2), offset: (x: 2pt, y: 2pt), blur: 4pt),
+    [
+      #text(content, font: "Fira Code", size: 14pt, color: rgb("#657b83"))
+    ]
+  )
+}
+
 // Pdfpc configuration
 // typst query --root . ./example.typ --field value --one "<pdfpc-file>" > ./example.pdfpc
 #let pdfpc-config = pdfpc.config(
@@ -43,7 +56,7 @@
     preamble: pdfpc-config, 
   ),
   config-info(
-    title: [Compose Multi-Platform],
+    title: [Jetpack Compose],
     subtitle: [An UI framework to rule them all],
     author: [Gianluca Aguzzi],
     date: datetime.today().display("[day] [month repr:long] [year]"),
@@ -52,26 +65,65 @@
   ),
 )
 
-#let feature-block(title, content, icon: "") = {
+#let styled-block(
+  title, 
+  content, 
+  icon: "", 
+  fill-color: rgb("#23373b").lighten(90%),
+  stroke-color: rgb("#23373b").lighten(50%),
+  title-color: rgb("#000000"),
+  title-size: 20pt
+) = {
   block(
     width: 100%,
     inset: (x: 24pt, y: 18pt),
-    fill: gradient.linear(
-      rgb("#23373b").lighten(80%),
-      rgb("#23373b").lighten(90%),
-      angle: 45deg
-    ),
+    fill: fill-color,
     radius: 8pt,
     stroke: (
-      paint: rgb("#23373b").lighten(50%), 
+      paint: stroke-color, 
       thickness: 1pt,
       dash: "solid"
     ),
     [
-      #text(weight: "bold", size: 22pt)[#icon #title]
-      #v(2pt)
+      #text(weight: "bold", size: title-size, fill: title-color)[#icon #title]
+      #v(-12pt)
+      #line(length: 100%, stroke: (paint: stroke-color, thickness: 1.5pt))
+      #v(-10pt)
       #content
     ]
+  )
+}
+
+// Now define specialized blocks using the base block
+#let feature-block(title, content, icon: "") = {
+  styled-block(
+    title, 
+    content, 
+    icon: icon,
+    fill-color: rgb("#23373b").lighten(90%),
+    stroke-color: rgb("#23373b").lighten(50%),
+    title-size: 22pt
+  )
+}
+
+#let note-block(title, content, icon: fa-info-circle() + " ") = {
+  styled-block(
+    title, 
+    content, 
+    icon: icon,
+    fill-color: rgb("#fffde7"),
+    stroke-color: rgb("#ffecb3"),
+  )
+}
+
+#let warning-block(title, content, icon: fa-exclamation-triangle() + " ") = {
+  styled-block(
+    title, 
+    content, 
+    icon: icon,
+    fill-color: rgb("#fff3e0"),
+    stroke-color: rgb("#ffcc80"),
+    title-color: rgb("#e65100"),
   )
 }
 
@@ -85,17 +137,30 @@
 - *Learning Objectives:*
   - Understand the basics of Compose and its architecture #fa-cogs()
     - Introduce the concept of `Composable` functions #fa-code()
-    - Explain the role of `State` and `Events` #fa-bell()
+    - Explain the Compose runtime and its phases #fa-cogs()
 
   - Explore the Compose UI toolkit and its components #fa-th-large()
-  - Learn about the Compose runtime and its features #fa-cogs()
   - *Focus* jetpack Compose (Android), therefore we just mention the other platforms
 - *Resources*
   - This presentation is based on the official #link("https://developer.android.com/jetpack/compose/documentation")[Compose documentation]
   - _Official resources_:
-    #link("https://developer.android.com/develop")[Android development portal], #link("https://developer.android.com/develop/ui/compose/kotlin")[Compose with Kotlin], #link("https://developer.android.com/develop/ui/compose/testing")[Testing in Compose], #link("https://developer.android.com/codelabs/jetpack-compose-basics")[Compose basics codelab], #link("https://developer.android.com/develop/ui/compose/mental-model")[Compose mental model], #link("https://kmp.jetbrains.com/#newProject")[KMP project starter], #link("https://www.jetbrains.com/lp/compose-multiplatform/")[Compose Multiplatform]
+    #text(size: 16pt)[
+      #link("https://developer.android.com/develop")[Android portal] • 
+      #link("https://developer.android.com/develop/ui/compose/kotlin")[Compose with Kotlin] • 
+      #link("https://developer.android.com/develop/ui/compose/testing")[Testing] • 
+      #link("https://developer.android.com/codelabs/jetpack-compose-basics")[Compose codelab] • 
+      #link("https://developer.android.com/develop/ui/compose/mental-model")[Mental model] • 
+      #link("https://kmp.jetbrains.com/#newProject")[KMP starter] • 
+      #link("https://www.jetbrains.com/lp/compose-multiplatform/")[Compose Multiplatform]
+    ]
 = Introduction
-
+#focus-slide()[
+  #text(style: "italic")[Construct UIs by descring *what*, not *how*]
+  #align(center)[
+    #image("figures/compose-logo.png", width: 30%)
+  ]
+  #text(weight: "bold")[Jetpack Compose]
+]
 == What is Compose?
 
 #grid(
@@ -107,10 +172,13 @@
       - Less code
       - Powerful tools
       - Intuitive Kotlin DSL
-    - Originally for Android (Jetpack Compose), now multi-platform
+    - Originally for Android (Jetpack Compose), now multi-platform!!
+      - Desktop, Web, iOS, and more
+    - It is data driven, reactive, and declarative
+    
   ],
   align(center)[
-    #image("figures/compose-logo.png", width: 80%)
+    #image("figures/compose-logo.png", width: 40%)
   ]
 )
 
@@ -167,12 +235,45 @@
     [Complex view hierarchies], [Composition-based structure]
   )
 ]
+
+== Technical Requirements
+
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 8pt,
+  text(size: 16pt)[
+    #text(weight: "bold")[Development Environment]
+    - Android Studio: Giraffe (2022.3.1) or later
+    - Gradle: 8.0+
+    - Kotlin: 1.8.0+
+    
+    #text(weight: "bold")[API Levels]
+    - Minimum SDK: API 21 (Lollipop)
+    - Recommended: API 23+ for better performance
+    - Target SDK: API 34+ (Android 14)
+  ],
+  text(size: 16pt)[
+    #text(weight: "bold")[Additional Requirements]
+    - Java 17 or later
+    - Supports Gradle with Kotlin DSL
+    - Works on physical devices and emulators (API 21+)
+  ]
+)
+#text(weight: "bold", size: 16pt)[Dependencies]
+    ```kotlin
+    dependencies {
+        implementation("androidx.compose.ui:ui:1.6.0")
+        implementation("androidx.compose.material3:material3:1.2.0")
+        implementation("androidx.compose.ui:ui-tooling-preview:1.6.0")
+    }
+    ```
+
 = Compose Core Concepts
 
 #focus-slide[
-  #text(size: 40pt)[All you need are *Composable Functions*!!]
+  #text(size: 30pt)[All you need are *Composable Functions*!!]
   #v(0.4em)
-    Focus on the UI (*what the user sees*) not on How to do it (*how to build the UI*)
+    #text(size: 25pt)[Focus on the UI (*what the user sees*) not on How to do it (*how to build the UI*)]
 
 ]
 == Composable Functions
@@ -195,26 +296,122 @@
   ]
 )
 
-== Composable Functions -- How to ``compose''?
+== Composable Functions
+#note-block("Name styling")[
+  Composable function names should:
+  - Start with a capital letter
+  - Use PascalCase (camel case with initial capital)
+  - Describe what the component is, not what it does
+  - Be nouns or noun phrases, not verbs
+  
+  Good examples: `Greeting`, `GreetingCard`, `UserProfile`, `MessageList`, `NavigationBar`
 
-- Simply by calling other composable functions #fa-arrow-up-small-big()
-- Composable functions can be nested
-- Composable functions can be passed as parameters to other composable functions
+  Avoid: `renderGreeting` ❌, `showUserInfo` ❌
+]
 
-=== Example:
-```kotlin
-@Composable
-fun Greeting(name: String) {
-    Text("Hello $name!")
-}
-@Composable
-fun GreetingCard(name: String) {
-    Column {
-        Text("Greeting Card")
-        Greeting(name)
+== Composable Functions -- How to compose?
+
+- Build UI by calling other composable functions #fa-puzzle-piece()
+- Compose nested hierarchies for complex layouts #fa-layer-group()
+- Pass composable functions as parameters (higher-order functions) #fa-code-branch()
+
+
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 12pt,
+  [
+    *Traditional View Approach*
+    
+    #text(size: 8pt)[
+    ```xml
+    <!-- greeting_card.xml -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Greeting Card" />
+            
+        <TextView
+            android:id="@+id/greeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    ```
+    
+    ```kotlin
+    // In Activity or Fragment
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.greeting_card)
+        
+        findViewById<TextView>(R.id.greeting).text = "Hello $name!"
     }
-}
-```
+    ```
+    ]
+  ],
+  [
+    *Compose Approach*
+    
+    #text(size: 18pt)[
+    ```kotlin
+    @Composable
+    fun Greeting(name: String) {
+        Text("Hello $name!")
+    }
+    @Composable
+    fun GreetingCard(name: String) {
+        Column {
+            Text("Greeting Card")
+            Greeting(name)
+        }
+    }
+    ```
+    ]
+  ]
+)
+
+== Composable Functions -- Side-effects frequently
+- Composable functions should ideally be *pure* (no side-effects)
+- We will see later how to handle side-effects (e.g., state management)
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 12pt,
+  [
+    #text(size: 16pt)[
+    ```kotlin
+    @Composable
+    fun SideEffectCounter() {
+      var counter = 0 // NO!! This breaks purity
+      Button(onClick = { counter++ }) {
+        Text("Counter: $counter")
+      }
+    }
+    ```
+    ]
+  ],
+  [
+    #text(size: 16pt)[
+    ```kotlin
+    @Composable
+    fun PureCpunter(value: Int) {
+      // Pure composable: no side effects whatsoever
+      Text(text = "Hello, $value!")
+    }
+    ```
+    ]
+  ]
+)
+#warning-block(
+  "Key Term",
+  "An effect is a composable function that doesn't emit UI and causes side effects to run when a composition completes."
+)
+
+
 == Why Composition Matters
 
 #grid(
@@ -233,16 +430,176 @@ fun GreetingCard(name: String) {
 
 
 #focus-slide[
+  #text(size: 30pt, weight: "bold")[Composable Functions Can Run in Any Order]
+  #v(1em)
+  #text(style: "italic", size: 20pt)[Don't rely on execution order between independent composables]
+]
+
+== Composable Functions -- Evaluation Order
+```kotlin
+@Composable
+fun OrderExample() {
+  Column {
+    Text("Composable functions might run in any order!")
+    // These independent composables could run in any order
+    FirstComponent()
+    SecondComponent()
+    ThirdComponent()  
+    Text(message)
+  }
+}
+```
+
+#focus-slide[
+  #text(size: 30pt, weight: "bold")[Composable Functions Can Run in Parallel]
+  #v(1em)
+  #text(style: "italic", size: 20pt)[Compose can optimize UI building by executing composables concurrently]
+]
+
+== Composable Functions -- Parallel Execution
+```kotlin
+@Composable
+fun ParallelExample() {
+  // These independent composables could run in parallel
+  Box() {
+    // These might run concurrently for performance optimization
+    UserProfile()
+    MessageList()
+    NotificationBadge()
+  }
+  
+  // Don't assume sequential execution!
+  var sharedCounter = 0  // BAD: Shared mutable variable
+  
+  // Each might increment at the same time, leading to race conditions
+  ComponentOne { sharedCounter++ }  // BAD
+  ComponentTwo { sharedCounter++ }  // BAD
+}
+```
+
+== Composable Function: Side
+
+#focus-slide()[
+  == Compose Main Steps
+  #align(center)[
+    #box(fill: rgb("#eef8ff"), radius: 6pt, inset: 10pt)[
+      #text(size: 20pt, fill: rgb("#0055aa"), weight: "medium")[Data]
+    ]
+    #h(2pt) #text(fill: white, size: 40pt)[#fa-long-arrow-right()] #h(15pt)
+    #box(fill: rgb("#e6f3e6"), radius: 6pt, inset: 10pt)[
+      #text(size: 20pt, fill: rgb("#005500"), weight: "medium")[Composition]
+    ]
+    #h(2pt) #text(fill: white, size: 40pt)[#fa-long-arrow-right()] #h(15pt)
+    #box(fill: rgb("#fff0e6"), radius: 6pt, inset: 10pt)[
+      #text(size: 20pt, fill: rgb("#883300"), weight: "medium")[Layout]
+    ]
+    #h(2pt) #text(fill: white, size: 40pt)[#fa-long-arrow-right()] #h(15pt)
+    #box(fill: rgb("#f0e6f5"), radius: 6pt, inset: 10pt)[
+      #text(size: 20pt, fill: rgb("#660066"), weight: "medium")[Draw]
+    ]
+    #h(2pt) #text(fill: white, size: 40pt)[#fa-long-arrow-right()] #h(15pt)
+    #box(stroke: 4pt, fill: rgb("#fff8e1"), radius: 6pt, inset: 10pt)[
+      #text(size: 20pt, fill: rgb("#886600"), weight: "medium")[Display]
+    ]
+  ]
+]
+
+== Composition Phase
+- In the composition phase, the Compose runtime executes composable functions.
+- It produces a UI tree of layout nodes.
+- The tree contains all necessary information for the subsequent phases.
+
+#align(center)[
+  #image("figures/composition.png", width: 60%)
+]
+
+== Layout Phase
+#note-block("Layout Phase")[
+  Compose computes the size and position of each layout node during the layout phase.
+]
+
+#align(center)[
+  #image("figures/layout.png", width: 60%)
+]
+
+- During the layout phase, the composition tree is processed using a three-step algorithm:
+  - #text(weight: "bold")[Measure Children]: The parent node measures its children, if any exist.
+  - #text(weight: "bold")[Decide Own Size]: Based on the children's measurements, the node determines its own size.
+  - #text(weight: "bold")[Place Children]: Each child node is positioned relative to its parent node.
+
+#warning-block("Attention")[
+  At the end of the layout phase, each node has:
+  - A defined width and height.
+  - A specific position within its parent layout (x, y coordinates).
+]
+
+== Draw Phase
+  #text(
+    weight: "bold",
+  )[ UI tree rendered top-to-bottom, ensuring proper order.
+  ]
+  #v(10pt)
+  #align(center)[
+    #image("figures/drawing.png", width: 60%)
+  ]
+  Ok, but this seems to be an immutable process, what about the *state*?
+  - When it comes to state, Compose has a special mechanism: *Recomposition*.
+
+== Recomposition
+
+- Recomposition is the process of calling composable functions again when *inputs change*
+#grid(
+  columns: (1fr),
+  gutter: 0pt,
+  [
+    ```kotlin
+@Composable
+fun LoginScreen(showError: Boolean) {
+  if (showError) {
+      LoginError()
+  }
+  LoginInput()
+}
+@Composable fun LoginInput() { /* ... */ }
+@Composable fun LoginError() { /* ... */ }```
+  ]
+)
+#align(center)[
+  #image("figures/recomposition-happen.png", width: 60%)
+]
+
+== 
+#focus-slide[
+  == Recomposition is Optimistic
+  #v(1em)
+  #text(size: 22pt)[Compose skips composables that don't need to be updated]
+]
+
+== State -- Memory in a Composable functions
+
+#feature-block("Compose State Management:", [
+  - Composable functions transform data into UI
+  - The *Composition* is the UI tree built when composables execute
+  - When state changes, Compose performs *recomposition*:
+    - Only re-executes affected composables 
+    - Efficiently updates just the parts of UI that need to change
+    - Creates a responsive, performance-optimized UI
+  - BTW what is a *State*?
+], icon: fa-sync() + " ")
+
+#focus-slide[
   State *is*, Events _happens_
   #align(center)[
     #image("figures/evolution-loop.png", width: 60%)
   ]
 ]
-
+/**
 == Event vs State
 - Event - An event is generated by the user or another part of the program.
 - Update State - An event handler changes the state that is used by the UI.
 - Display State - The UI is updated to display the new state.
+
+== Recomposition
 
 == State -- Memory in a Composable functions
 Compose apps transform data into UI by calling composable functions. We refer to the Composition as the description of the UI built by Compose when it executes composables. If a state change happens, Compose re-executes the affected composable functions with the new state, creating an updated UI—this is called recomposition. Compose also looks at what data an individual composable needs, so that it only recomposes components whose data has changed and skips those that are not affected.
@@ -376,4 +733,4 @@ Type Safety
 == Testing
 
 == Multi-Platform Compose
-
+**/
