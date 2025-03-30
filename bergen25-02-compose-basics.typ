@@ -168,6 +168,15 @@
   )
 }
 
+// Option 2: Language-specific styling (just for Kotlin)
+#show raw.where(lang: "kotlin"): block.with(
+  fill: rgb("#f5f5f5"),
+  stroke: rgb("#e0e0e0"),
+  radius: 5pt,
+  inset: 8pt,
+  width: 100%,
+)
+
 #let compact-warning-block(content, icon: fa-exclamation-triangle() + " ") = {
   compact-styled-block(
     content, 
@@ -325,7 +334,7 @@ dependencies {
 #focus-slide[
   #text(size: 30pt)[All you need are *Composable Functions* #fa-exclamation()]
   #v(0.4em)
-    #text(size: 25pt)[Focus on the UI (*what the user sees*) not on How to do it (*how to build the UI*)]
+    #text(size: 25pt)[Focus on the UI (*what the user sees*) not on how to do it (*how to build the UI*)]
 
 ]
 == Composable Functions
@@ -519,7 +528,6 @@ fun ParallelExample() {
     MessageList()
     NotificationBadge()
   }
-  
   // Don't assume sequential execution!
   var sharedCounter = 0  // BAD: Shared mutable variable
   
@@ -643,9 +651,7 @@ fun ParallelExample() {
 - Display State - The UI is updated to display the new state.
   ```kotlin
   @Composable
-  fun CounterDisplay(counter: Int) {
-      Text("Counter: $counter")
-  }
+  fun CounterDisplay(counter: Int) { Text("Counter: $counter") }
   ```
 
 == MutableState\<T>
@@ -754,9 +760,8 @@ fun ParallelExample() {
   Replace internal state variables with two parameters:
   #text(size: 13pt)[
   ```kotlin
-  // Instead of internal state:
-  @Composable fun StetefulComponent() { var text by remember { mutableStateOf("") } }
-  // Use this pattern:
+  @Composable fun StetefulComponent() { var text by remember { mutableStateOf("") } } // Internal state:
+  // Suggested pattern
   @Composable fun StatelessComponent(
       value: T,                  // ← State flows down
       onValueChange: (T) -> Unit // ← Events flow up
@@ -818,9 +823,7 @@ fun ParallelExample() {
       ```kotlin
       @Composable
       fun StatefulCounter() {
-        var count by remember { 
-          mutableStateOf(0) 
-        }
+        var count by remember { mutableStateOf(0) }
         Button(onClick = { count++ }) {
           Text("Count: $count")
         }
@@ -840,8 +843,7 @@ fun ParallelExample() {
       ```kotlin
       @Composable
       fun StatelessCounter(
-        count: Int,
-        onIncrement: () -> Unit
+        count: Int, onIncrement: () -> Unit
       ) {
         Button(onClick = onIncrement) {
           Text("Count: $count")
@@ -954,18 +956,511 @@ fun ParallelExample() {
 
 = Compose Hands On -- Let's Code!
 
+== Why Hands On?
+- Hands-on practice is essential for truly understanding Compose concepts
+- Through coding examples, we'll explore:
+  - Component layout and positioning strategies
+  - Styling and theming techniques
+  - Effective design processes for reusable components
+  - Real-world integration patterns
+- This practical session will bridge theory and implementation
+- You'll gain insights that are difficult to convey through slides alone
+== Example: Pokedex
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 12pt,
+  [
+    #feature-block("Requirements:", [
+      - Create a simple Pokedex app that:
+        - Shows a list of Pokemon
+        - Allows viewing Pokemon details
+        - Uses proper state management
+        - Applies Compose best practices
+      - Components:
+        - Search bar
+        - Pokemon list
+        - Pokemon item (card)
+    ], icon: fa-list-check() + " ")
+  ],
+  [
+    #align(center)[
+      #image("figures/pokedex.png", width: 70%)
+      #text(style: "italic", size: 16pt)[Sample Pokedex UI built with Compose]
+    ]
+  ]
+)
+== How to divide the UI? Row, Column, Box
+#feature-block("Basic Layout Components:", [
+  
+      - *Row*: Arranges children horizontally
+        - Use `horizontalArrangement` to control spacing
+        - Use `verticalAlignment` for cross-axis alignment
+      
+      - *Column*: Arranges children vertically
+        - Use `verticalArrangement` to control spacing
+        - Use `horizontalAlignment` for cross-axis alignment
+      
+      - *Box*: Stacks children on top of each other
+        - Use `contentAlignment` for positioning
+        - Children can use `Modifier.align()` for individual positioning
+    ])
 
-== Modifiers
-Type Safety
+== Example: Pokemon Item
+#align(center)[
+  #image("figures/pokemon-details.png", width: 70%)
+]
 
-= Advanced Compose
+#compact-feature-block[Focus on the Pokemon Item:
+  - Each component is a composable function
+  - In this case this may `PokemonItem` which takes a `Pokemon` object as a parameter
+  - This function, can be devided in two sub-components:
+    - `PokemonInitial` to show the initial (C in this case)
+    - `PokemonDetails` to show the name and the type
+]
 
-= Canvas Drawing
+== Pokemon Initial
+- Focus on What, it should be simple a Box with a Text inside:
+```kotlin
+@Composable
+fun PokemonInitial(initial: Char) {
+    Box() {Text(text = initial)}
+}```
+Ok, but not fancy, how to *style* it?
+#compact-warning-block[
+  - Use `Modifier` to apply styles and behaviors
+  - `Modifier` is a powerful tool in Compose for customizing UI elements
+  - It allows you to chain multiple modifications together
+]
+== Modifiers in Compose
 
-== Animation
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 12pt,
+  [
+    #feature-block("What are Modifiers?", [
+      - The primary way to *decorate* or *augment* composable elements
+      - A consistent, chainable API to modify UI elements
+      - Modifiers control:
+        - Size and layout
+        - Appearance and styling
+        - Behavior and interactions
+        - Accessibility properties
+      - Applied using the `Modifier` parameter
+    ], icon: fa-paint-brush() + " ")
+  ],
+  [
+    #text(size: 16pt)[
+    ```kotlin
+@Composable
+fun PokemonInitial(initial: Char) {
+    Box(
+        modifier = Modifier
+          .size(40.dp)
+          .background(
+            Color.White.copy(0.5f), 
+            RoundedCornerShape(4.dp)
+        ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+          text = initial.toString(), 
+          fontWeight = FontWeight.Bold
+        )
+    }
+}
+    ```
+    ]
+  ]
+)
+== Key Properties of Modifiers
 
-== Debugging
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 12pt,
+  [
+    #feature-block("Key Properties:", [
+      - *Order matters*: Different order = different result
+      - *Chainable*: Call multiple modifiers in sequence
+      - *Reusable*: Can extract and reuse modifier chains
+      - *Scope-safe*: Some modifiers only work in specific parent composables
+    ], icon: fa-list-check() + " ")
+  ],
+  [
+    #note-block("Common Modifier Types:", [
+      - *Layout*: size, padding, fillMaxWidth
+      - *Appearance*: background, clip, shadow, alpha
+      - *Interaction*: clickable, scrollable, draggable
+      - *Position*: offset, align, zIndex
+      - *Combination*: then, composed, semantics
+    ])
+  ]
+)
 
-== Testing
+== Modifiers in Action
+ #compact-note-block[
+      Create reusable modifier chains:
+      ```kotlin
+      val roundedModifier = Modifier
+        .fillMaxWidth()
+        .background(Color.Gray.copy(alpha=0.1f)).padding(12.dp)
+        .clip(RoundedCornerShape(8.dp))
+      ```
+    ]
+     #compact-warning-block[
+      Order matters!
+      ```kotlin
+      // Different results:
+      Modifier.padding(4.dp).background(Color.Red)
+      Modifier.background(Color.Red).padding(4.dp)
+      ```
+    ]
 
-== Multi-Platform Compose
+== Pokemon Item -- Wrap it up
+#feature-block("Pokemon Item Implementation", [
+  Now let's combine our components to create a complete `PokemonItem`:
+  - Use a `Card` with styled background based on Pokemon type
+  - Organize content in a `Row` layout
+  - Apply appropriate spacing and alignment
+  - Leverage Material Design components for polished UI
+])
+
+#compact-note-block[
+  The card color changes based on the Pokemon's type, providing visual cues to users
+]
+
+== Pokemon Item - Implementation
+#text(size: 16pt)[
+```kotlin
+@Composable
+fun PokemonItem(pokemon: Pokemon) {
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(4.dp),
+        colors = CardDefaults.cardColors(
+          containerColor = getPokemonTypeColor(pokemon.type)
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            PokemonInitial(pokemon.name.first())
+            Spacer(modifier = Modifier.width(8.dp))
+            PokemonDetails(pokemon.name, pokemon.type.toString())
+        }
+    }
+}
+```]
+== Material Design in Compose
+
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 12pt,
+  [
+    #feature-block("Material Design Integration:", [
+      - Compose is *fully integrated* with Material Design
+      - Built-in implementation of Material 3 (latest version)
+      - Consistent, modern UI without extra work
+      - Customizable through Material theming system:
+        - Colors; Typography; Shapes
+      - Supports both light and dark themes automatically
+    ], icon: fa-palette() + " ")
+  ],
+  [
+    #text(size: 12pt)[
+    ```kotlin
+    @Composable
+    fun MaterialDesignInCompose() {
+      Column(modifier = Modifier.padding(16.dp)) {
+        Text(
+          "Material Design in Compose",
+          style = MaterialTheme.typography.headlineMedium
+        )
+        Text(
+          "Built-in Material Design components",
+          style = MaterialTheme.typography.bodyLarge,
+          color = MaterialTheme.colorScheme.secondary
+        )
+        Row(
+          modifier = Modifier.padding(vertical = 8.dp),
+          horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+          Button(onClick = {}) { Text("Button") }
+          OutlinedButton(onClick = {}) { Text("Outlined") }
+          TextButton(onClick = {}) { Text("Text") }
+        }
+        Switch(checked = true, onCheckedChange = {})
+        LinearProgressIndicator(
+          modifier = Modifier.padding(vertical: 8.dp)
+        )
+      }
+    }
+    ```
+    ]
+  ]
+)
+
+== Search Bar - Design
+#align(center)[
+  #image("figures/search_bar.png", width: 40%)
+]
+- Search interface requires both *state* and *events*:
+  - State: Current query text (`searchQuery: String`)
+  - Event: Query change handler (`onQueryChange: (String) -> Unit`)
+- Using *state hoisting* pattern for better:
+  - Reusability across different screens; Testability in isolation; Control over search behavior
+- The stateless component signature:
+  #text(size: 16pt, style: "italic")[
+    ```kotlin
+    @Composable
+    fun SearchBar(
+      searchQuery: String,
+      onQueryChange: (String) -> Unit
+    )
+    ```
+  ]
+== Search Bar -- Implementation
+```kotlin
+@Composable
+fun SearchBar(searchQuery: String, onQueryChange: (String) -> Unit) {
+    TextField(
+        value = searchQuery,
+        onValueChange = onQueryChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        placeholder = { Text("Search") },
+        leadingIcon = { 
+          Icon(Icons.Default.Search, contentDescription = null) 
+        },
+        singleLine = true
+    )
+}
+```
+
+== How to List Items?
+
+
+    #feature-block("LazyColumn:", [
+      - Efficiently displays large lists of items
+      - Only renders visible items, improving performance
+      - Supports item recycling and view caching
+      - Automatically handles scrolling and item positioning
+    ], icon: fa-list() + " ")
+  
+    #text(size: 16pt)[
+    ```kotlin
+    @Composable
+    fun PokemonList(pokemons: List<Pokemon>) {
+        LazyColumn {
+            // extension function to be "lazy" in rendering elements
+            items(pokemons) { pokemon ->
+                PokemonItem(pokemon)
+            }
+        }
+    }
+    ```
+    ]
+  
+== Lazy vs Non-Lazy Components
+
+#compact-feature-block([
+  #v(-2em)
+  #text(size: 18pt)[
+  #grid(
+    columns: (1fr, 1fr),
+    gutter: 12pt,
+    [
+      #text(weight: "bold")[Lazy Components #fa-check()]
+      - `LazyColumn`, `LazyRow`, `LazyVerticalGrid`
+      - Only compose and layout visible items
+      - Use for *large or unknown size* lists
+      - Efficient memory usage for long lists
+      - Support for item keys and animations
+    ],
+    [
+      #text(weight: "bold")[Non-Lazy Components #fa-times()]
+      - `Column`, `Row`
+      - Compose and layout *all* items at once
+      - Use only for *small, fixed-size* lists
+      - Can cause performance issues with large lists
+      - Simpler API for basic use cases
+    ]
+  )]
+])
+
+#compact-warning-block[
+  Using `Column` with a large list can cause:
+  - UI jank and stuttering
+  - Excessive memory usage
+  - Poor scrolling performance
+  - ANR (Application Not Responding) errors
+]
+
+== StylishPokedex -- Step 1: State Management
+
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 12pt,
+  [
+    - Identify what state we need to track:
+      - Search query text
+      - Pokemon list data
+      - Filtered pokemon list
+    
+    - Apply state hoisting principles:
+      - Hoist search query to parent component
+      - Delegate filtering logic to parent
+  ],
+  [
+    #text(size: 16pt)[
+    ```kotlin
+    @Composable
+    fun StylishPokedex(loader: @Composable () -> List<Pokemon>) {
+        // Hoisting the search query state
+        var searchQuery by remember { 
+          mutableStateOf("") 
+        }
+        // Get the Pokemon data
+        val pokemonList = loader()
+        
+        // Rest of implementation...
+    }
+    ```]
+  ]
+)
+
+== StylishPokedex -- Step 2: Implementing Filtering Logic
+
+#feature-block("Efficient Filtering:", [
+  - Use `remember` with dependencies to optimize performance
+  - Only recalculate filtered list when search query or data changes
+  - Filter based on both name and type
+])
+```kotlin
+val filteredList = remember(searchQuery) {
+    pokemonList.filter {
+        it.name.contains(searchQuery, ignoreCase = true) ||
+        it.type.toString().contains(searchQuery, ignoreCase = true)
+    }
+}
+```
+
+== StylishPokedex -- Step 3: Finalize Component Structure
+
+- First, let's think about the component hierarchy needed:
+  - Main screen (`StylishPokedex`)
+  - Top app bar with title
+  - Search functionality
+  - Pokemon list
+
+```kotlin
+Scaffold(
+  topBar = { TopAppBar(title = { Text("Pokédex") }) }
+) { padding ->
+    Column(modifier = Modifier.padding(padding)) {
+        SearchBar(searchQuery) { searchQuery = it }
+        PokemonList(filteredList)
+    }
+}
+```
+
+== FancyPokedex -- Complete Implementation
+#text(size: 16pt)[
+```kotlin
+@Composable
+fun StylishPokedex(loader: @Composable () -> List<Pokemon>) {
+    var searchQuery by remember { mutableStateOf("") }
+    val pokemonList = loader()
+    val filteredList = remember(searchQuery) {
+        pokemonList.filter {
+            it.name.contains(searchQuery, ignoreCase = true) ||
+            it.type.toString().contains(searchQuery, ignoreCase = true)
+        }
+    }
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Pokédex") }) }
+    ) { padding ->
+        Column(modifier = Modifier.padding(padding)) {
+            SearchBar(searchQuery) { searchQuery = it }
+            PokemonList(filteredList)
+        }
+    }
+}```
+]
+
+== FancyPokedex -- Deploy
+- Now, let's deploy our app to the emulator or device
+- Previous composable functions serve as UI components - they need a host
+- Use `@Preview` annotation during development to visualize components without running the app
+- For a complete project setup with proper Gradle configuration, check the shared repository!
+#text(size: 16pt)[
+```kotlin
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            IntroTheme { FancyPokedex { loadPokemonFromResources() } }
+        }
+    }
+}
+```
+]
+
+= Conclusion
+== Key Takeaways
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 12pt,
+  [
+    #text(size: 18pt)[
+    #feature-block("Core Concepts Mastered:", [
+      - *Declarative UI*: Focus on what your UI should look like, not how to build it
+      - *Composable Functions*: Building UI with pure Kotlin functions
+      - *State Management*: Using `remember`, `mutableStateOf`, and state hoisting
+      - *Recomposition*: Efficient UI updates when state changes
+      - *Unidirectional Data Flow*: Clear path for state and events
+    ], icon: fa-check-circle() + " ")]
+  ],
+  [
+
+    #text(size: 16pt)[
+    #feature-block("Best Practices:", [
+      - Stateless composables for reusability and testability
+      - Apply state hoisting for proper separation of concerns
+      - Use modifiers to style and customize components
+      - Leverage Material Design components for consistent UI
+      - Keep components small and focused on a single responsibility
+      - Remember: order matters with modifiers!
+    ], icon: fa-star() + " ")]
+  ]
+)
+
+== Advanced Compose Topics
+#feature-block("Advanced Compose Topics:", [ In the rest, we will mention some advanced topics (not in depth):
+  - *Animation*: Build fluid, meaningful motion with AnimatedVisibility, animateContentSize, and transitions: #link("https://developer.android.com/jetpack/compose/animation")[#fa-globe()]
+  - *Canvas*: Create custom graphics and visualizations with the Canvas API #link("https://developer.android.com/jetpack/compose/graphics/canvas")[#fa-globe()]
+  - *Debugging*: Use Layout Inspector and Composition tracing to troubleshoot UI issues #link("https://developer.android.com/jetpack/compose/testing/debugging")[#fa-globe()]
+  - *Testing*: Write robust tests for your composables with ComposeTestRule and Espresso #link("https://developer.android.com/jetpack/compose/testing")[#fa-globe()]
+  - *Multi-platform*: Extend your UI skills across desktop, web, and iOS with Compose Multiplatform -- See #link("https://www.jetbrains.com/lp/compose-multiplatform/")["Compose Multiplatform"] for more details and this repository #link("https://github.com/cric96/compose-flocking")[#fa-github()]
+], icon: fa-rocket() + " ")
+
+== Compose Advanced
+#warning-block("Not Covered Today", [
+  Although essential for production apps, we've focused on Compose fundamentals rather than:
+  - Android ViewModel integration
+  - Navigation Component with Compose
+  - Coroutines & Flow for asynchronous operations
+  
+  These topics deserve dedicated exploration - check the official documentation for guidance.
+], icon: fa-info-circle() + " ")
+
+#focus-slide[
+  #text(size: 30pt, weight: "bold")[Compose is a powerful tool for building modern UIs]
+  #v(1em)
+  #align(center)[
+    #image("figures/compose-logo.png", width: 20%)
+  ]
+  Thanks for your attention!
+]
