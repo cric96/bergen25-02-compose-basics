@@ -214,7 +214,7 @@
     ]
 = Introduction
 #focus-slide()[
-  #text(style: "italic")[Construct UIs by descring *what*, not *how*]
+  #text(style: "italic")[Construct UIs by describing *what*, not *how*]
   #align(center)[
     #image("figures/compose-logo.png", width: 30%)
   ]
